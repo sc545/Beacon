@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\anim\\dialog_in.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\anim\\dialog_in.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\anim\\dialog_out.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\anim\\dialog_out.xml"
+    }
+]

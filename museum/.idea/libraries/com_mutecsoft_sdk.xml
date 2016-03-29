@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="com.mutecsoft.sdk">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/libs/com.mutecsoft.sdk.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

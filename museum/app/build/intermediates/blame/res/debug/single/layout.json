@@ -1,0 +1,38 @@
+[
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\tabview_layout.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\tabview_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\search_layout.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\search_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\map_layout.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\map_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\popuplayout.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\popuplayout.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\content_layout.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\content_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\info_layout.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\info_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\tab_item.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\tab_item.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\popuptoast_layout.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\popuptoast_layout.xml"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\layout\\activity_main.xml",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\layout\\activity_main.xml"
+    }
+]
