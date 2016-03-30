@@ -9,13 +9,6 @@
         <dex dex="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-f5a0b819f3fff16cad77fcfc026c1f5a3e9b1734.jar" />
     </item>
     <item
-        jar="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\exploded-aar\com.android.support\support-v13\23.0.0\jars\libs\internal_impl-23.0.0.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="5d4bccb885c8a89d066ecb6c4addb553a99a79a2">
-        <dex dex="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-c9da0d6e61a8be97a3e0697fdf5504447c29ed0e.jar" />
-    </item>
-    <item
         jar="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\exploded-aar\com.android.support\support-v4\23.0.0\jars\classes.jar"
         jumboMode="false"
         revision="23.0.1"
@@ -23,11 +16,18 @@
         <dex dex="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\pre-dexed\debug\classes-67cd7f39f0aff1d34841b200dcbdfb46e57c079c.jar" />
     </item>
     <item
-        jar="C:\Users\K\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.0\support-annotations-23.0.0.jar"
+        jar="C:\Users\Mutecsoft_pc\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-annotations\23.0.0\support-annotations-23.0.0.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="990e7f98a7bad86a40b1f0bcfeb039023afd0839">
-        <dex dex="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\pre-dexed\debug\support-annotations-23.0.0-84d1ee777ace7aa89f6794398dd9033d0fc2634a.jar" />
+        <dex dex="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\pre-dexed\debug\support-annotations-23.0.0-c2442e4b0bf0cd419365113353dc5d572fc01329.jar" />
+    </item>
+    <item
+        jar="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\exploded-aar\com.android.support\support-v13\23.0.0\jars\libs\internal_impl-23.0.0.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="5d4bccb885c8a89d066ecb6c4addb553a99a79a2">
+        <dex dex="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\pre-dexed\debug\internal_impl-23.0.0-c9da0d6e61a8be97a3e0697fdf5504447c29ed0e.jar" />
     </item>
     <item
         jar="D:\git\Beacon\BluetoothLeGatt\Application\build\intermediates\exploded-aar\com.android.support\cardview-v7\23.0.0\jars\classes.jar"

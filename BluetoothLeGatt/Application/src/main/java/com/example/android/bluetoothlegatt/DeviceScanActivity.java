@@ -16,16 +16,22 @@
 
 package com.example.android.bluetoothlegatt;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ListActivity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -37,15 +43,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
+@TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class DeviceScanActivity extends ListActivity {
+    private final static String TAG = DeviceScanActivity.class.getSimpleName();
+
     private LeDeviceListAdapter mLeDeviceListAdapter;
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
+
+    private BluetoothLeScanner mBluetoothLeScanner;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
@@ -57,6 +70,8 @@ public class DeviceScanActivity extends ListActivity {
         getActionBar().setTitle(R.string.title_devices);
         mHandler = new Handler();
 
+
+
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
         if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
@@ -66,8 +81,7 @@ public class DeviceScanActivity extends ListActivity {
 
         // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         // Checks if Bluetooth is supported on the device.
@@ -75,6 +89,26 @@ public class DeviceScanActivity extends ListActivity {
             Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
             finish();
             return;
+        }
+
+        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
+        // fire an intent to display a dialog asking the user to grant permission to enable it.
+        if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
+
+        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+
+        //Check if Bluetooth LE Scanner is available.
+        if(mBluetoothLeScanner == null){
+            Toast.makeText(this, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
+            if (!mBluetoothAdapter.isEnabled()) {
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            }
+            mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+//            return;
         }
     }
 
@@ -112,14 +146,6 @@ public class DeviceScanActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
 
-        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
-        // fire an intent to display a dialog asking the user to grant permission to enable it.
-        if (!mBluetoothAdapter.isEnabled()) {
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
-        }
 
         // Initializes list view adapter.
         mLeDeviceListAdapter = new LeDeviceListAdapter();
@@ -152,7 +178,8 @@ public class DeviceScanActivity extends ListActivity {
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_NAME, device.getName());
         intent.putExtra(DeviceControlActivity.EXTRAS_DEVICE_ADDRESS, device.getAddress());
         if (mScanning) {
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+//            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mBluetoothLeScanner.stopScan(mScanCallback);
             mScanning = false;
         }
         startActivity(intent);
@@ -165,16 +192,18 @@ public class DeviceScanActivity extends ListActivity {
                 @Override
                 public void run() {
                     mScanning = false;
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                    mBluetoothLeScanner.stopScan(mScanCallback);
                     invalidateOptionsMenu();
                 }
             }, SCAN_PERIOD);
 
             mScanning = true;
-            mBluetoothAdapter.startLeScan(mLeScanCallback);
+            mBluetoothLeScanner.startScan(mScanCallback);
+
         } else {
             mScanning = false;
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+            mBluetoothLeScanner.stopScan(mScanCallback);
+
         }
         invalidateOptionsMenu();
     }
@@ -245,24 +274,150 @@ public class DeviceScanActivity extends ListActivity {
         }
     }
 
-    // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
+    private ScanCallback mScanCallback = new ScanCallback() {
+        @Override
+        public void onScanResult(int callbackType, ScanResult result) {
+           processResult(result);
+        }
 
         @Override
-        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+        public void onBatchScanResults(List<ScanResult> results) {
+            for(ScanResult result : results){
+                processResult(result);
+            }
+        }
+
+        @Override
+        public void onScanFailed(int errorCode) {
+        }
+
+        private void processResult(final ScanResult result){
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    mLeDeviceListAdapter.addDevice(device);
+                    int txPower = result.getScanRecord().getTxPowerLevel();
+                    Log.d(TAG, "txPower : "+txPower);
+                    mLeDeviceListAdapter.addDevice(result.getDevice());
                     mLeDeviceListAdapter.notifyDataSetChanged();
                 }
             });
         }
+
+
     };
+
+
+//
+//    // Device scan callback.
+//    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+//        new BluetoothAdapter.LeScanCallback() {
+//
+//        @Override
+//        public void onLeScan(final BluetoothDevice device, int rssi, final byte[] scanRecord) {
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//
+//                    int startByte = 2;
+//                    boolean patternFound = false;
+//                    while (startByte <= 5) {
+//                        if (    ((int) scanRecord[startByte + 2] & 0xff) == 0x02 && //Identifies an iBeacon
+//                                ((int) scanRecord[startByte + 3] & 0xff) == 0x15) { //Identifies correct data length
+//                            patternFound = true;
+//                            break;
+//                        }
+//                        startByte++;
+//                    }
+//
+//                    if (patternFound) {
+//                        //Convert to hex String
+//                        byte[] uuidBytes = new byte[16];
+//                        System.arraycopy(scanRecord, startByte+4, uuidBytes, 0, 16);
+//                        String hexString = bytesToHex(uuidBytes);
+//
+//                        //Here is your UUID
+//                        String uuid =  hexString.substring(0,8) + "-" +
+//                                hexString.substring(8,12) + "-" +
+//                                hexString.substring(12,16) + "-" +
+//                                hexString.substring(16,20) + "-" +
+//                                hexString.substring(20,32);
+//
+//                        //Here is your Major value
+//                        int major = (scanRecord[startByte+20] & 0xff) * 0x100 + (scanRecord[startByte+21] & 0xff);
+//
+//                        //Here is your Minor value
+//                        int minor = (scanRecord[startByte+22] & 0xff) * 0x100 + (scanRecord[startByte+23] & 0xff);
+//
+//
+//
+//                        Log.d(TAG, "uuid : "+uuid);
+//                        Log.d(TAG, "major : "+major);
+//                        Log.d(TAG, "minor : "+minor);
+//                        Log.d(TAG, "txPower : "+getTxPowerLevel(scanRecord));
+//
+//
+//                    }
+//
+//
+//
+//                    mLeDeviceListAdapter.addDevice(device);
+//                    mLeDeviceListAdapter.notifyDataSetChanged();
+//                }
+//            });
+//        }
+//    };
+
+//    public static Integer getTxPowerLevel(byte[] scanRecord) {
+//
+//        final byte TXPOWER = 0x0A;
+//
+//        // Check for BLE 4.0 TX power
+//        int pos = findCodeInBuffer(scanRecord, TXPOWER);
+//        if (pos > 0) {
+//            return Integer.valueOf(scanRecord[pos]);
+//        }
+//        return null;
+//    }
+//    private static int findCodeInBuffer(byte[] buffer, byte code) {
+//        final int length = buffer.length;
+//        int i = 0;
+//        while (i < length - 2) {
+//            int len = buffer[i];
+//            if (len < 0) {
+//                return -1;
+//            }
+//
+//            if (i + len >= length) {
+//                return -1;
+//            }
+//
+//            byte tcode = buffer[i + 1];
+//            if (tcode == code) {
+//                return i + 2;
+//            }
+//
+//            i += len + 1;
+//        }
+//
+//        return -1;
+//    }
+//
+//
+//    static final char[] hexArray = "0123456789ABCDEF".toCharArray();
+//    private static String bytesToHex(byte[] bytes) {
+//        char[] hexChars = new char[bytes.length * 2];
+//        for ( int j = 0; j < bytes.length; j++ ) {
+//            int v = bytes[j] & 0xFF;
+//            hexChars[j * 2] = hexArray[v >>> 4];
+//            hexChars[j * 2 + 1] = hexArray[v & 0x0F];
+//        }
+//        return new String(hexChars);
+//    }
 
     static class ViewHolder {
         TextView deviceName;
         TextView deviceAddress;
     }
+
 }

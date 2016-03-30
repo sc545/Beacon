@@ -97,28 +97,28 @@ public class TabMainActvity extends TabActivity {
 		@Override
 		public void onEnteredRegion(Region region) {
 //			Toast.makeText(getApplicationContext(), "Region in " + region.getIdentifier(), Toast.LENGTH_SHORT).show();
-			addNotification(new Intent(TabMainActvity.this, TabMainActvity.class), "±¹¸³Áß¾Ó ¹Ú¹¬°ü", "±¹¸³Áß¾Ó ¹Ú¹°°ü ¹æ¹®À» È¯¿µÇÕ´Ï´Ù.", ADD_REGION_NOTI);
+			addNotification(new Intent(TabMainActvity.this, TabMainActvity.class), "ï¿½ï¿½ï¿½ï¿½ï¿½ß¾ï¿½ ï¿½Ú¹ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ß¾ï¿½ ï¿½Ú¹ï¿½ï¿½ï¿½ ï¿½æ¹®ï¿½ï¿½ È¯ï¿½ï¿½ï¿½Õ´Ï´ï¿½.", ADD_REGION_NOTI);
 			PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			if(!manager.isScreenOn()) {
 				Intent intent = new Intent(TabMainActvity.this, PopupToast.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				TabMainActvity.this.getApplicationContext().startActivity(intent);
 			}else {
-				addToastView("¹Ú¹°°üÀ» ¹æ¹®ÇØ ÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù.");
+				addToastView("ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æ¹®ï¿½ï¿½ ï¿½Ö¼Å¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.");
 			}
 		}
 	
 		@Override
 		public void onExitRegion(Region region) {
 			Toast.makeText(getApplicationContext(), "Region out " + region.getIdentifier(), Toast.LENGTH_SHORT).show();
-			addNotification(new Intent(TabMainActvity.this, TabMainActvity.class), "±¹¸³Áß¾Ó ¹Ú¹¬°ü", "±¹¸³Áß¾Ó ¹Ú¹°°üÀ» ¹æ¹®ÇÏ¿© ÁÖ¼Å¼­ °¨»çÇÕ´Ï´Ù¤¿.\r\n ¾È³çÈ÷ µ¹¾Æ°¡½Ê½Ã¿À.", ADD_REGION_NOTI);
+			addNotification(new Intent(TabMainActvity.this, TabMainActvity.class), "ï¿½ï¿½ï¿½ï¿½ï¿½ß¾ï¿½ ï¿½Ú¹ï¿½ï¿½ï¿½", "ï¿½ï¿½ï¿½ï¿½ï¿½ß¾ï¿½ ï¿½Ú¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½æ¹®ï¿½Ï¿ï¿½ ï¿½Ö¼Å¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´Ù¤ï¿½.\r\n ï¿½È³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½Ê½Ã¿ï¿½.", ADD_REGION_NOTI);
 			PowerManager manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
 			if(!manager.isScreenOn()) {
 				Intent intent = new Intent(TabMainActvity.this, PopupToast.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 				TabMainActvity.this.getApplicationContext().startActivity(intent);
 			}else {
-				addToastView("¾È³çÈ÷ µ¹¾Æ°¡½Ê½Ã¿À.");
+				addToastView("ï¿½È³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½Ê½Ã¿ï¿½.");
 			}
 		}
 	}
@@ -155,7 +155,7 @@ public class TabMainActvity extends TabActivity {
 				}else {
 					if(mCurrent_beacon != null && mCurrent_beacon.getMacAddress().equals(beacon.getMacAddress())){
 						if(ContentActivity.content!= null && !ContentActivity.content.getUrl().equals(Home_URL)) {
-							Utils.showToast(TabMainActvity.this, "ºñÄÜ°ú ¸Ö¾îÁ³½À´Ï´Ù. È¨È­¸éÀ¸·Î µ¹¾Æ°©´Ï´Ù.");
+							Utils.showToast(TabMainActvity.this, "ï¿½ï¿½ï¿½Ü°ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½. È¨È­ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½Ï´ï¿½.");
 							ContentActivity.reLoadContent(Home_URL);
 						}
 					}
@@ -236,7 +236,7 @@ public class TabMainActvity extends TabActivity {
             manager = mService.getBeaconManager();
             if(manager == null) {
             	mService.init(TabMainActvity.this);
-            	Region region = new Region("Museaum", "0288DCBAC7B2436CBED44E9256E67F89", null, null);
+            	Region region = new Region("Museaum", "FB882FE377C84EACBFE00FC3DC909B19", null, null);
             	manager = mService.getBeaconManager();
             	manager.startMonitoring(region);
             }

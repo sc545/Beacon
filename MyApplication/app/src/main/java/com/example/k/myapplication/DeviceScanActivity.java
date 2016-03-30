@@ -20,6 +20,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mutecsoft.sdk.Beacon;
+import com.mutecsoft.sdk.BeaconManager;
+
 import java.util.ArrayList;
 
 /**
@@ -34,6 +37,7 @@ public class DeviceScanActivity extends ListActivity {
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
