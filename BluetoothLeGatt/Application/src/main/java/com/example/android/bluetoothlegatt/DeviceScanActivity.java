@@ -16,6 +16,7 @@
 
 package com.example.android.bluetoothlegatt;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.ListActivity;
@@ -31,6 +32,8 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -64,6 +67,9 @@ public class DeviceScanActivity extends ListActivity {
     // Stops scanning after 10 seconds.
     private static final long SCAN_PERIOD = 10000;
 
+
+    private ScanCallback mScanCallback;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +85,48 @@ public class DeviceScanActivity extends ListActivity {
             finish();
         }
 
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+            } else {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                        1);
+            }
+        }
+
+//// Device scan callback.
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
+//                    == PackageManager.PERMISSION_GRANTED) {
+//                mScanCallback = new ScanCallback() {
+//                    @Override
+//                    public void onScanResult(int callbackType, ScanResult result) {
+//                        super.onScanResult(callbackType, result);
+//                        mLeDeviceListAdapter.addDevice(result.getDevice());
+//                        mLeDeviceListAdapter.notifyDataSetChanged();
+//                    }
+//                };
+//            }
+//        }
+//
+//        final BluetoothManager bluetoothManager =
+//                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+//        mBluetoothAdapter = bluetoothManager.getAdapter();
+//
+//        if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+////            mSwipeRefreshLayout.setRefreshing(true);
+////            mLeDeviceListAdapter.clear();
+//            mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+//            if(ContextCompat.checkSelfPermission(this,
+//                    Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
+//                mBluetoothLeScanner.startScan(mScanCallback);
+//            }
+//        }
+
+
+    // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
         // BluetoothAdapter through BluetoothManager.
         final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
@@ -274,37 +321,37 @@ public class DeviceScanActivity extends ListActivity {
         }
     }
 
-    private ScanCallback mScanCallback = new ScanCallback() {
-        @Override
-        public void onScanResult(int callbackType, ScanResult result) {
-           processResult(result);
-        }
-
-        @Override
-        public void onBatchScanResults(List<ScanResult> results) {
-            for(ScanResult result : results){
-                processResult(result);
-            }
-        }
-
-        @Override
-        public void onScanFailed(int errorCode) {
-        }
-
-        private void processResult(final ScanResult result){
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    int txPower = result.getScanRecord().getTxPowerLevel();
-                    Log.d(TAG, "txPower : "+txPower);
-                    mLeDeviceListAdapter.addDevice(result.getDevice());
-                    mLeDeviceListAdapter.notifyDataSetChanged();
-                }
-            });
-        }
-
-
-    };
+//    private ScanCallback mScanCallback = new ScanCallback() {
+//        @Override
+//        public void onScanResult(int callbackType, ScanResult result) {
+//           processResult(result);
+//        }
+//
+//        @Override
+//        public void onBatchScanResults(List<ScanResult> results) {
+//            for(ScanResult result : results){
+//                processResult(result);
+//            }
+//        }
+//
+//        @Override
+//        public void onScanFailed(int errorCode) {
+//        }
+//
+//        private void processResult(final ScanResult result){
+//            runOnUiThread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    int txPower = result.getScanRecord().getTxPowerLevel();
+//                    Log.d(TAG, "txPower : "+txPower);
+//                    mLeDeviceListAdapter.addDevice(result.getDevice());
+//                    mLeDeviceListAdapter.notifyDataSetChanged();
+//                }
+//            });
+//        }
+//
+//
+//    };
 
 
 //

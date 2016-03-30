@@ -29,6 +29,10 @@ uses-permission#android.permission.ACCESS_FINE_LOCATION
 ADDED from AndroidManifest.xml:35:5
 	android:name
 		ADDED from AndroidManifest.xml:35:22
+uses-permission#android.permission.ACCESS_COARSE_LOCATION
+ADDED from AndroidManifest.xml:36:5
+	android:name
+		ADDED from AndroidManifest.xml:36:22
 application
 ADDED from AndroidManifest.xml:38:5
 MERGED from com.android.support:support-v4:23.0.0:22:5
