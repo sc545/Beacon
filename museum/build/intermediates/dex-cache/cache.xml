@@ -9,11 +9,11 @@
         <dex dex="D:\git\Beacon\museum\app\build\intermediates\pre-dexed\debug\com.mutecsoft.sdk_98ae734feb0f3ba0d6a3f82fe735ef547652faf1.jar" />
     </item>
     <item
-        jar="C:\Users\Mutecsoft_pc\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jar="C:\Users\K\AppData\Local\Android\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
         jumboMode="false"
         revision="23.0.2"
         sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67">
-        <dex dex="D:\git\Beacon\museum\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0_42d01a0720bb95032eff8f5b0d469a1b443c8cfd.jar" />
+        <dex dex="D:\git\Beacon\museum\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0_a663fcdd639ea7047ec0cbf6aec5a6c330e123bd.jar" />
     </item>
 
 </items>

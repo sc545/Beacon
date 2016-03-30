@@ -96,67 +96,67 @@ public class DeviceScanActivity extends ListActivity {
             }
         }
 
-//// Device scan callback.
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
-//                    == PackageManager.PERMISSION_GRANTED) {
-//                mScanCallback = new ScanCallback() {
-//                    @Override
-//                    public void onScanResult(int callbackType, ScanResult result) {
-//                        super.onScanResult(callbackType, result);
-//                        mLeDeviceListAdapter.addDevice(result.getDevice());
-//                        mLeDeviceListAdapter.notifyDataSetChanged();
-//                    }
-//                };
-//            }
-//        }
-//
-//        final BluetoothManager bluetoothManager =
-//                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-//        mBluetoothAdapter = bluetoothManager.getAdapter();
-//
-//        if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
-////            mSwipeRefreshLayout.setRefreshing(true);
-////            mLeDeviceListAdapter.clear();
-//            mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-//            if(ContextCompat.checkSelfPermission(this,
-//                    Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
-//                mBluetoothLeScanner.startScan(mScanCallback);
-//            }
-//        }
+// Device scan callback.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mScanCallback = new ScanCallback() {
+                    @Override
+                    public void onScanResult(int callbackType, ScanResult result) {
+                        super.onScanResult(callbackType, result);
+                        mLeDeviceListAdapter.addDevice(result.getDevice());
+                        mLeDeviceListAdapter.notifyDataSetChanged();
+                    }
+                };
+            }
+        }
 
-
-    // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
-        // Checks if Bluetooth is supported on the device.
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
-        // fire an intent to display a dialog asking the user to grant permission to enable it.
-        if (!mBluetoothAdapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-        }
-
-        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-
-        //Check if Bluetooth LE Scanner is available.
-        if(mBluetoothLeScanner == null){
-            Toast.makeText(this, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
-            if (!mBluetoothAdapter.isEnabled()) {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-            }
+        if (mBluetoothAdapter.getState() == BluetoothAdapter.STATE_ON) {
+//            mSwipeRefreshLayout.setRefreshing(true);
+//            mLeDeviceListAdapter.clear();
             mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
-//            return;
+            if(ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION ) == PackageManager.PERMISSION_GRANTED) {
+                mBluetoothLeScanner.startScan(mScanCallback);
+            }
         }
+
+
+//    // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+//        // BluetoothAdapter through BluetoothManager.
+//        final BluetoothManager bluetoothManager = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+//        mBluetoothAdapter = bluetoothManager.getAdapter();
+//
+//        // Checks if Bluetooth is supported on the device.
+//        if (mBluetoothAdapter == null) {
+//            Toast.makeText(this, R.string.error_bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+//            finish();
+//            return;
+//        }
+//
+//        // Ensures Bluetooth is enabled on the device.  If Bluetooth is not currently enabled,
+//        // fire an intent to display a dialog asking the user to grant permission to enable it.
+//        if (!mBluetoothAdapter.isEnabled()) {
+//            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//        }
+//
+//        mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+//
+//        //Check if Bluetooth LE Scanner is available.
+//        if(mBluetoothLeScanner == null){
+//            Toast.makeText(this, "Can not find BLE Scanner", Toast.LENGTH_SHORT).show();
+//            if (!mBluetoothAdapter.isEnabled()) {
+//                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+//                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+//            }
+//            mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
+////            return;
+//        }
     }
 
     @Override
