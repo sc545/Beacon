@@ -70,6 +70,8 @@ public class DeviceScanActivity extends ListActivity {
 
     private ScanCallback mScanCallback;
 
+    double distance;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,6 +106,21 @@ public class DeviceScanActivity extends ListActivity {
                     @Override
                     public void onScanResult(int callbackType, ScanResult result) {
                         super.onScanResult(callbackType, result);
+
+                        int txPower = result.getScanRecord().getTxPowerLevel();
+                        String str = ""+txPower;
+                        str = ""+str.charAt(0)+str.charAt(1)+str.charAt(2);
+                        txPower = Integer.parseInt(str);
+                        Log.d(TAG, "Rssi : "+result.getRssi()+"txPower1 : "+str);
+                        double rssi = result.getRssi();
+                        Log.d(TAG, "Rssi : "+result.getRssi()+"txPower : "+txPower);
+                        double num = calculateAccuracy(-65, -59);
+                        Log.d(TAG, "num:"+num);
+                        distance =  calculateAccuracy(-65, -59);
+                        Log.d(TAG, "distance : "+calculateAccuracy(-65, -59));
+                        Log.d(TAG, "distance : "+distance);
+                        Log.d(TAG, result.getScanRecord().toString());
+
                         mLeDeviceListAdapter.addDevice(result.getDevice());
                         mLeDeviceListAdapter.notifyDataSetChanged();
                     }
@@ -156,6 +173,34 @@ public class DeviceScanActivity extends ListActivity {
 //            }
 //            mBluetoothLeScanner = mBluetoothAdapter.getBluetoothLeScanner();
 ////            return;
+//        }
+    }
+
+    // reference : http://developer.radiusnetworks.com/2014/12/04/fundamentals-of-beacon-ranging.html
+    protected static double calculateAccuracy(int txPower, double rssi) {
+        if (rssi == 0) {
+            return -1.0; // if we cannot determine distance, return -1.
+        }
+
+        double ratio = rssi*1.0/txPower;
+        if (ratio < 1.0) {
+            return Math.pow(ratio,10);
+        }
+        else {
+            double accuracy =  (0.89976)*Math.pow(ratio,7.7095) + 0.111;
+            return accuracy;
+        }
+
+//        if(rssi == 0.0D) {
+//            return -1.0D;
+//        } else {
+//            double ratio = rssi * 1.0D / (double)txPower;
+//            if(ratio < 1.0D) {
+//                return Math.pow(ratio, 10.0D);
+//            } else {
+//                double accuracy = 0.89976D * Math.pow(ratio, 7.7095D) + 0.111D;
+//                return accuracy;
+//            }
 //        }
     }
 
@@ -304,6 +349,7 @@ public class DeviceScanActivity extends ListActivity {
                 viewHolder = new ViewHolder();
                 viewHolder.deviceAddress = (TextView) view.findViewById(R.id.device_address);
                 viewHolder.deviceName = (TextView) view.findViewById(R.id.device_name);
+                viewHolder.deviceDistance = (TextView) view.findViewById(R.id.device_ditance);
                 view.setTag(viewHolder);
             } else {
                 viewHolder = (ViewHolder) view.getTag();
@@ -311,10 +357,14 @@ public class DeviceScanActivity extends ListActivity {
 
             BluetoothDevice device = mLeDevices.get(i);
             final String deviceName = device.getName();
-            if (deviceName != null && deviceName.length() > 0)
+            if (deviceName != null && deviceName.length() > 0) {
                 viewHolder.deviceName.setText(deviceName);
-            else
+                viewHolder.deviceDistance.setText(String.format("distance : (%.2fm)", distance));
+            }
+            else {
                 viewHolder.deviceName.setText(R.string.unknown_device);
+                viewHolder.deviceDistance.setText(R.string.unknown_device);
+            }
             viewHolder.deviceAddress.setText(device.getAddress());
 
             return view;
@@ -465,6 +515,7 @@ public class DeviceScanActivity extends ListActivity {
     static class ViewHolder {
         TextView deviceName;
         TextView deviceAddress;
+        TextView deviceDistance;
     }
 
 }
