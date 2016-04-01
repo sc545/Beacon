@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
     compile files('libs/com.mutecsoft.sdk.jar')
+    compile (name:'android-beacon-library-2.8-beta1', ext:'aar')
 }

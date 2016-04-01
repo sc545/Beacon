@@ -20,22 +20,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mutecsoft.sdk.Beacon;
-import com.mutecsoft.sdk.BeaconManager;
-
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 
 /**
@@ -55,10 +49,41 @@ public class DeviceScanActivity extends ListActivity {
     private static final long SCAN_PERIOD = 10000000;
 
     // 스캔된 디바이스에 거리를 담는 변수
-    double distance;
+    double mDistance;
 
-    String path;
+    String mPath;
     File file;
+
+    // BLE 디바이스가 스캔되었을떄 호출 될 스캔콜백
+    // Device scan callback.
+    private BluetoothAdapter.LeScanCallback mLeScanCallback =
+            new BluetoothAdapter.LeScanCallback() {
+
+                @Override
+                public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Log.d(TAG, "" + rssi);
+                            Log.d(TAG, "" + computeAccuracy(rssi, -74));
+                            if(rssi < 0) {
+                                mDistance = computeAccuracy(rssi, -74);
+                                String str = String.format(device.getName()+" %.2fm", mDistance);
+                                write(str);
+                            }
+
+                            mLeDeviceListAdapter.addDevice(device);
+                            mLeDeviceListAdapter.notifyDataSetChanged();
+
+
+
+
+                        }
+                    });
+                }
+            };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,9 +91,9 @@ public class DeviceScanActivity extends ListActivity {
         getActionBar().setTitle("BLE Device Scan");
 
         mHandler = new Handler();
-        path = Environment.getExternalStorageDirectory().getPath();
+        mPath = Environment.getExternalStorageDirectory().getPath();
 
-        file = new File(path+"/test.txt");
+        file = new File(mPath +"/test.txt");
 
         // BLE 기능이 지원되는지 확인
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -164,6 +189,7 @@ public class DeviceScanActivity extends ListActivity {
             finish();
             return;
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -211,6 +237,59 @@ public class DeviceScanActivity extends ListActivity {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
         invalidateOptionsMenu();
+    }
+
+    private void write(String distance){
+        String str = getCurrentTime() +" "+distance+"\n";
+        FileOutputStream fos = null;
+        try {
+
+            fos = new FileOutputStream(file, true);
+            if(fos != null){
+                fos.write(str.getBytes());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+        }finally {
+            try {
+                if(fos != null){
+                    fos.close();
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private static String getCurrentTime(){
+        Calendar calendar = Calendar.getInstance();
+        String strTime = String.format("%d-%d-%d %d:%d:%d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
+        return  strTime;
+    }
+
+
+
+    // 비콘의 거리 측정 메서드
+    private static double computeAccuracy(int rssi, int measuredPower) {
+        if(rssi == 0) {
+            return -1.0D;
+        } else {
+            double ratio = (double)rssi / (double)measuredPower;
+            double rssiCorrection = 0.96D + Math.pow((double)Math.abs(rssi), 3.0D) % 10.0D / 150.0D;
+            return ratio <= 1.0D?Math.pow(ratio, 9.98D) * rssiCorrection:(0.103D + 0.89978D * Math.pow(ratio, 7.71D)) * rssiCorrection;
+        }
+    }
+
+
+    static class ViewHolder {
+        TextView deviceName;
+        TextView deviceAddress;
+        TextView deviceDistance;
     }
 
     // 검색된 디바이스들과 리스트 뷰를 담을 어댑터
@@ -274,7 +353,7 @@ public class DeviceScanActivity extends ListActivity {
             final String deviceName = device.getName();
             if (deviceName != null && deviceName.length() > 0) {
                 viewHolder.deviceName.setText(deviceName);
-                viewHolder.deviceDistance.setText(String.format("distance: (%.2fm)", distance));
+                viewHolder.deviceDistance.setText(String.format("mDistance: (%.2fm)", mDistance));
             }
             else
                 viewHolder.deviceName.setText(R.string.unknown_device);
@@ -283,81 +362,4 @@ public class DeviceScanActivity extends ListActivity {
             return view;
         }
     }
-
-    // BLE 디바이스가 스캔되었을떄 호출 될 스캔콜백
-    // Device scan callback.
-    private BluetoothAdapter.LeScanCallback mLeScanCallback =
-            new BluetoothAdapter.LeScanCallback() {
-
-                @Override
-                public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Log.d(TAG, "" + rssi);
-                            Log.d(TAG, "" + computeAccuracy(rssi, -74));
-                            distance = computeAccuracy(rssi, -74);
-                            mLeDeviceListAdapter.addDevice(device);
-                            mLeDeviceListAdapter.notifyDataSetChanged();
-                            String str = String.format("%.2fm", distance);
-                            write(str);
-
-
-
-                        }
-                    });
-                }
-            };
-
-    private void write(String distance){
-        String str = getCurrentTime() +" "+distance+"\n";
-        FileOutputStream fos = null;
-        try {
-
-            fos = new FileOutputStream(file, true);
-            if(fos != null){
-                fos.write(str.getBytes());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
-        }finally {
-            try {
-                if(fos != null){
-                    fos.close();
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }
-    }
-
-    private static String getCurrentTime(){
-        Calendar calendar = Calendar.getInstance();
-        String strTime = String.format("%d-%d-%d %d:%d:%d", calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH), calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND));
-        return  strTime;
-    }
-
-
-    static class ViewHolder {
-        TextView deviceName;
-        TextView deviceAddress;
-        TextView deviceDistance;
-    }
-
-    // 비콘의 거리 측정 메서드
-    private static double computeAccuracy(int rssi, int measuredPower) {
-        if(rssi == 0) {
-            return -1.0D;
-        } else {
-            double ratio = (double)rssi / (double)measuredPower;
-            double rssiCorrection = 0.96D + Math.pow((double)Math.abs(rssi), 3.0D) % 10.0D / 150.0D;
-            return ratio <= 1.0D?Math.pow(ratio, 9.98D) * rssiCorrection:(0.103D + 0.89978D * Math.pow(ratio, 7.71D)) * rssiCorrection;
-        }
-    }
-
 }
