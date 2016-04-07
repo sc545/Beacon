@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 
 /**
  * Created by K on 2016-03-29.
@@ -49,7 +50,8 @@ public class DeviceScanActivity extends ListActivity {
     private static final long SCAN_PERIOD = 10000000;
 
     // 스캔된 디바이스에 거리를 담는 변수
-    double mDistance;
+    private HashMap<String, Double> mDistances;
+
 
     String mPath;
     File file;
@@ -64,36 +66,75 @@ public class DeviceScanActivity extends ListActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            String deviceAddress = device.getAddress();
+                            double distance = computeAccuracy(rssi, -74);
 
+                            Log.d(TAG, "" + device.getName());
                             Log.d(TAG, "" + rssi);
-                            Log.d(TAG, "" + computeAccuracy(rssi, -74));
+                            Log.d(TAG, "" + distance);
+
                             if(rssi < 0) {
-                                mDistance = computeAccuracy(rssi, -74);
-                                String str = String.format(device.getName()+" %.2fm", mDistance);
-                                write(str);
+
+                                if(!mDistances.containsKey(deviceAddress)) {
+                                    mDistances.put(deviceAddress, distance);
+                                }else{
+                                    mDistances.remove(deviceAddress);
+                                    mDistances.put(deviceAddress, distance);
+                                }
+                                write(device.getName(), mDistances.get(deviceAddress));
                             }
+
 
                             mLeDeviceListAdapter.addDevice(device);
                             mLeDeviceListAdapter.notifyDataSetChanged();
-
-
-
 
                         }
                     });
                 }
             };
 
+    private static final int REQUEST_CODE = 0x11;
+    String[] permissions = {"android.permission.WRITE_EXTERNAL_STORAGE", "android.permission.ACCESS_COARSE_LOCATION"};
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if(requestCode == REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                Toast.makeText(getApplicationContext(), permissions[0]+"PERMISSION_DENIED", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+            if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+                Toast.makeText(getApplicationContext(), permissions[1]+"PERMISSION_DENIED", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+
+        }
+//        else if(requestCode == REQUEST_CODE2){
+//            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//
+//            } else {
+//                Toast.makeText(getApplicationContext(), "PERMISSION_DENIED", Toast.LENGTH_SHORT).show();
+//            }
+//        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        getWindow().requestFeature( Window.FEATURE_ACTION_BAR );
         getActionBar().setTitle("BLE Device Scan");
+
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE);
 
         mHandler = new Handler();
         mPath = Environment.getExternalStorageDirectory().getPath();
-
         file = new File(mPath +"/test.txt");
+        mDistances = new HashMap<String, Double>();
 
         // BLE 기능이 지원되는지 확인
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -103,17 +144,14 @@ public class DeviceScanActivity extends ListActivity {
             finish();
         }
 
-        //for android 6.0
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
-            } else {
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                        1);
-            }
-        }
+//        //for android 6.0
+//        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+//            Toast.makeText(this, "message", Toast.LENGTH_SHORT).show();
+//            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+//            } else {
+//                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+//            }
+//        }
 
 
         // 블루투스 어댑터 변수 초기화
@@ -239,8 +277,9 @@ public class DeviceScanActivity extends ListActivity {
         invalidateOptionsMenu();
     }
 
-    private void write(String distance){
-        String str = getCurrentTime() +" "+distance+"\n";
+    private void write(String deviceName, double distance){
+        String str = String.format(deviceName+" %.2fm", distance);
+        str = getCurrentTime() +" "+str+"\n";
         FileOutputStream fos = null;
         try {
 
@@ -250,10 +289,10 @@ public class DeviceScanActivity extends ListActivity {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, e.toString());
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(getApplicationContext(), e.toString(), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, e.toString());
         }finally {
             try {
                 if(fos != null){
@@ -298,10 +337,14 @@ public class DeviceScanActivity extends ListActivity {
         private ArrayList<BluetoothDevice> mLeDevices; // 블루트스 디바이스를 담을 ArrayList 변수
         private LayoutInflater mInflator; // layout을 가져올 인플레이터 변수
 
+
+
+
         public LeDeviceListAdapter() {
             super();
             mLeDevices = new ArrayList<BluetoothDevice>();
             mInflator = DeviceScanActivity.this.getLayoutInflater();
+            mDistances = new HashMap<String, Double>();
         }
 
         // BLE 디바이스 추가
@@ -353,7 +396,7 @@ public class DeviceScanActivity extends ListActivity {
             final String deviceName = device.getName();
             if (deviceName != null && deviceName.length() > 0) {
                 viewHolder.deviceName.setText(deviceName);
-                viewHolder.deviceDistance.setText(String.format("mDistance: (%.2fm)", mDistance));
+                viewHolder.deviceDistance.setText(String.format("distance: (%.2fm)", mDistances.get(device.getAddress())));
             }
             else
                 viewHolder.deviceName.setText(R.string.unknown_device);
