@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -59,11 +60,13 @@ public class MainActivity extends AppCompatActivity {
                 if(ani.isRunning())
                     ani.stop();
                 iv.setImageResource(R.drawable.pink_attack);
+                Animation animation = new RotateAnimation(0f, 360f);
+                animation.setDuration(10000);
+                ((Button)findViewById(R.id.btnAttack)).startAnimation(animation);
                 ani = (AnimationDrawable) iv.getDrawable();
                 ani.start();
             }
         });
-
 
         ani.start();
     }
