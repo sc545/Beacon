@@ -15,6 +15,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".LayoutActivity"/>
+        <activity android:name=".AnimationActivity"/>
+        <activity android:name=".TweenAnimationActivity"/>
+        <activity android:name=".FrameAnimationActivity"/>
+        <activity android:name=".ObjectAnimatorActivity"/>
+        <activity android:name=".UiThreadActivity"/>
+
     </application>
 
 </manifest>

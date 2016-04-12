@@ -1,73 +1,50 @@
 package com.example.mutecsoft.myanimation;
 
-import android.animation.Animator;
-import android.graphics.Matrix;
-import android.graphics.drawable.AnimationDrawable;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
-import android.view.animation.Transformation;
 import android.widget.Button;
-import android.widget.ImageView;
+
 
 public class MainActivity extends AppCompatActivity {
-    ImageView iv;
+    Button btnLayout, btnAnimation, btnUiThread;
 
-    AnimationDrawable ani;
+    Intent i;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        iv = (ImageView) findViewById(R.id.iv);
+        btnLayout = (Button) findViewById(R.id.btnLayout);
+        btnAnimation = (Button) findViewById(R.id.btnAnimation);
+        btnUiThread = (Button) findViewById(R.id.btnUiThread);
 
-        ani = (AnimationDrawable) iv.getDrawable();
-
-
-        ((Button)findViewById(R.id.btnRun)).setOnClickListener(new View.OnClickListener() {
+        btnLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ani.isRunning())
-                    ani.stop();
-                iv.setImageResource(R.drawable.pink_run);
-                Animation animation = new AlphaAnimation(0f, 1f);
-                animation.setDuration(500);
-                iv.startAnimation(animation);
-                ani = (AnimationDrawable) iv.getDrawable();
-                ani.start();
-            }
-        });
-        ((Button)findViewById(R.id.btnJump)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(ani.isRunning())
-                    ani.stop();
-                iv.setImageResource(R.drawable.pink_jump);
-                ani = (AnimationDrawable) iv.getDrawable();
-                ani.start();
-
+                i  = new Intent(getApplicationContext(), LayoutActivity.class);
+                startActivity(i);
             }
         });
 
-        ((Button)findViewById(R.id.btnAttack)).setOnClickListener(new View.OnClickListener() {
+        btnAnimation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(ani.isRunning())
-                    ani.stop();
-                iv.setImageResource(R.drawable.pink_attack);
-                Animation animation = new RotateAnimation(0f, 360f);
-                animation.setDuration(10000);
-                ((Button)findViewById(R.id.btnAttack)).startAnimation(animation);
-                ani = (AnimationDrawable) iv.getDrawable();
-                ani.start();
+                i  = new Intent(getApplicationContext(), AnimationActivity.class);
+                startActivity(i);
             }
         });
 
-        ani.start();
+        btnUiThread.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                i  = new Intent(getApplicationContext(), UiThreadActivity.class);
+                startActivity(i);
+            }
+        });
+
     }
 }
+
