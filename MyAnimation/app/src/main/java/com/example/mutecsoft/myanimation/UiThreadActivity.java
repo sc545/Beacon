@@ -15,9 +15,12 @@ import android.widget.Toast;
  */
 public class UiThreadActivity extends Activity {
     Button btnOnUiThread, btnOnWorkerThread;
+
+    // ui 화면의 상태를 보여줄 애니메이션 변수
     ImageView ivThread;
     AnimationDrawable animationDrawable;
 
+    // 작업 스레드에서 ui 갱신을 할 수 있도록 핸들러 변수 선언
     Handler mHandler;
 
     @Override
@@ -34,20 +37,22 @@ public class UiThreadActivity extends Activity {
 
         mHandler = new Handler();
 
+        // ui 스레드에서 longTask 수행
         btnOnUiThread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                longTask(mHandler);
+                longTask(mHandler, "UI Thread");
             }
         });
 
+        // 작업 스레드에서 longTask 수행
         btnOnWorkerThread.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        longTask(mHandler);
+                        longTask(mHandler, "Worker Thread");
                     }
                 }).start();
 
@@ -56,16 +61,17 @@ public class UiThreadActivity extends Activity {
 
     }
 
-    private void longTask(Handler handler){
+    private void longTask(Handler handler, final String name){
 
         try {
             Thread.sleep(5000);
+            // view.post() x
             handler.post(new Runnable() {
 
                 @Override
                 public void run() {
 
-                    Toast.makeText(getApplicationContext(), "longTask 완료", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), name+" longTask 완료", Toast.LENGTH_SHORT).show();
                 }
             });
 

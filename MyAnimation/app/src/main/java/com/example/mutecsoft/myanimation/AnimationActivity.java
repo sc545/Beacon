@@ -16,7 +16,7 @@ import android.widget.ImageView;
  * Created by mutecsoft on 2016-04-12.
  */
 public class AnimationActivity extends Activity {
-    Button btnTweenAnim, btnFrameAnim, btnObjectAnim;
+    Button btnTweenAnim, btnFrameAnim, btnValueAnim, btnObjectAnim;
     Intent i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class AnimationActivity extends Activity {
 
         btnTweenAnim = (Button) findViewById(R.id.btnTweenAnim);
         btnFrameAnim = (Button) findViewById(R.id.btnFrameAnim);
+        btnValueAnim = (Button) findViewById(R.id.btnValueAnim);
         btnObjectAnim = (Button) findViewById(R.id.btnObjectAnim);
 
         btnTweenAnim.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +40,14 @@ public class AnimationActivity extends Activity {
             @Override
             public void onClick(View v) {
                 i = new Intent(getApplicationContext(), FrameAnimationActivity.class);
+                startActivity(i);
+            }
+        });
+
+        btnValueAnim.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                i = new Intent(getApplicationContext(), ValueAnimatorActivity.class);
                 startActivity(i);
             }
         });

@@ -16,10 +16,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".LayoutActivity"/>
+        <activity android:name=".WeightLayoutActivity"/>
+        <activity android:name=".RuntimeLayoutActivity"/>
+
         <activity android:name=".AnimationActivity"/>
         <activity android:name=".TweenAnimationActivity"/>
         <activity android:name=".FrameAnimationActivity"/>
+        <activity android:name=".ValueAnimatorActivity"/>
         <activity android:name=".ObjectAnimatorActivity"/>
+
         <activity android:name=".UiThreadActivity"/>
 
     </application>
