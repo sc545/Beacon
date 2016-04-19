@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\m_icon.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\m_icon.png"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\search2x.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\search2x.png"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\appinfo2.jpg",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\appinfo2.jpg"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\antique_vase.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\antique_vase.png"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\search.jpg",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\search.jpg"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\icon.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\icon.png"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\info.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\info.png"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\main2.jpg",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\main2.jpg"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\beacon_main.jpg",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\beacon_main.jpg"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\appmap.jpg",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\appmap.jpg"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\home.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\home.png"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ic_launcher.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\unnamed.webp",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\unnamed.webp"
+    },
+    {
+        "merged": "D:\\git\\Beacon\\museum\\app\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\near_me2x.png",
+        "source": "D:\\git\\Beacon\\museum\\app\\src\\main\\res\\drawable-hdpi\\near_me2x.png"
+    }
+]
