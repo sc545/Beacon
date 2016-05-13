@@ -1,0 +1,113 @@
+금일 과제
+
+
+
+1. adb 명령어 shell, push, pull
+
+
+- adb shell : 해당 시스템의 쉘에 연결, 해당 시스템 탐색 수정.
+
+- adb push a b : source dir destination dir 
+
+- adb pull a b : source dir destination dir
+
+
+
+2. android partion 종류 및 특성 cache data system 등등
+
+
+- boot : Android의 Booting 관련 파티션.
+
+- system : Android Framework 부분이다.
+
+- Recovery : Android 복구 이미지.
+
+- Data : UserData 영역. 연락처, sms, 설치했던 App들이 저장된다.
+
+- Cache : Android Cache 파일. Android에서 자주 접근하는 파일이나 App의 Component들을 저장한다.
+
+- Misc : Android의 다양한 Setting들이 저장 된다. CID, USB, Hardware 설정 값들이 저장된다.
+
+- sdcard : User가 일반적으로 음악, 동영상, 사진 등을 저장하는 파티션. FAT32로 이루어져 있다.
+
+- sdcard/ext : 추가 sdcard가 있을 경우 생기는 파티션
+
+
+
+3. 개발을 위해서 apk 를 어디에 푸쉬해야 동작하는지
+
+- Data 파티션에 푸쉬 할 경우 공초를 하게되면 apk가 삭제된다.
+- system 파티션에 푸쉬 하면 공초를 해도 apk가 삭제되지 않는다.
+
+
+4. ubuntu (linux) 명령어 ls, find, grep
+
+- ls : 현재 디렉토리 목록 출력
+
+- find : 파일 찾기
+
+- grep : 문자열 찾기
+
+
+
+
+5. 안드로이드 빌드를 위한 절차 
+
+https://source.android.com/source/building.html
+
+build/envsetup.sh 에 있는 alias function list 및 각각의 기능 , jgrep, mgrep, resgrep, croot ,godir, m, mm, mmm
+
+=========================================alias function list==================================================
+
+// 빌드 환경을 셋업해주는 함수. //
+- lunch:     lunch <product_name>-<build_variant>
+
+# Configures the build to build unbundled apps.
+# Run tapas with one or more app names (from LOCAL_PACKAGE_NAME)
+- tapas:     tapas [<App1> <App2> ...] [arm|x86|mips|armv5|arm64|x86_64|mips64] [eng|userdebug|user]
+cd 
+- croot:     Changes directory to the top of the tree. 
+(Anroid full source root directory로 이동한다.)
+
+
+// Source에 대한 build를 도와주는 함수들이다. (make관련 함수들) //
+
+- m:         Makes from the top of the tree. 
+(현재 경로를 기준으로 소스 트리의 최상위 경로로 이동한 후 make를 실행해준다.)
+
+- mm:        Builds all of the modules in the current directory, but not their dependencies.
+(현재 경로를 기준으로 가장 가까운 단위 모듈을 찾아서 그 모듈만 build 해준다.)
+
+- mmm:       Builds all of the modules in the supplied directories, but not their dependencies.
+             To limit the modules being built use the syntax: mmm dir/:target1,target2.
+(파라미터로 주어진 경로들에 대해 단위 모듈 build를 해준다. 마지막에 snod를 추가할 경우 System image 파일까지 새로 생성해준다.)
+
+- mma:       Builds all of the modules in the current directory, and their dependencies.
+(현재 경로를 기준으로 가장 가까운 단위 모듈을 찾아서(dependency 포함) build 해준다.)
+
+- mmma:      Builds all of the modules in the supplied directories, and their dependencies.
+(파라미터로 주어진 경로들에 대해 단위 모듈(dependency 포함) build를 해준다. 마지막에 snod를 추가할 경우 System image 파일까지 새로 생성해준다.)
+
+- provision: Flash device with all required partitions. Options will be passed on to fastboot.
+
+
+// C/C++ source, java source, resource 등등 특정 문자열 패턴을 찾아준다. //
+
+- cgrep:     Greps on all local C/C++ files.
+- ggrep:     Greps on all local Gradle files.
+- jgrep:     Greps on all local Java files.
+- resgrep:   Greps on all local res/*.xml files.
+- mangrep:   Greps on all local AndroidManifest.xml files.
+- mgrep:     Greps on all local Makefiles files.
+- sepgrep:   Greps on all local sepolicy files.
+- sgrep:     Greps on all local source files.
+
+
+// 파라미터로 넘겨준 이름을 포함하는 경로로 이동할 수 있게 도와준다. //
+- godir:     Go to the directory containing a file.
+
+
+
+// 도움 된 사이트 //
+http://chlrbgh0.tistory.com/entry/%EC%95%88%EB%93%9C%EB%A1%9C%EC%9D%B4%EB%93%9C-%EC%86%8C%EC%8A%A4%ED%8A%B8%EB%A6%AC-%ED%8E%B8%ED%95%98%EA%B2%8C-%EB%8B%A4%EB%A3%A8%EA%B8%B0-TIP
+http://www.kaisyu.com/notes/google-android/android-envsetupsh

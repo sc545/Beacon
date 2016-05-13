@@ -1,0 +1,43 @@
+오늘의 과제입니다.
+
+
+
+오늘은 aosp 소스트리에서 packages/app/Provision 을 참고하여 setupwizard  test 를 해봅시다.
+
+
+
+시료에 직접 푸쉬해서 테스트를 할 건데요.
+
+
+
+
+adb root 와
+
+(루트 권한으로 adbd 데몬을 재시작한다.)
+
+
+adb remount 명령어를 알아야 합니다. 2개에 대해서 조사하고
+
+(디바이스의 시스템 앱에 읽기-쓰기 기능을 얻게 해준다.)
+
+
+
+
+
+adb push 작성한.apk /system/custpack/app/unremoveable 와 같이 푸쉬한 다음에 초기화를 해서 테스트합니다.
+
+
+
+
+
+1. 셋업위자드에 버튼을 달아 버튼이 클릭되면 다음 셋업위자드 세팅으로 넘어갈 수 있게 한다.
+
+
+
+
+2. priority 는 3 으로 함.
+
+
+ Debug.wait
+
+/home/mutecsoft/Provision/out/production/Provision
