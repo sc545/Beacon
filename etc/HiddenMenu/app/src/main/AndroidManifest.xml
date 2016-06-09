@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.mutecsoft.mybroadcastreceiverapplication">
+    package="example.com.hiddenmenu">
 
     <application
         android:allowBackup="true"
@@ -16,14 +16,6 @@
             </intent-filter>
         </activity>
 
-        <receiver
-            android:name="com.example.mutecsoft.mybroadcastreceiverapplication.StaticReceiver">
-            <intent-filter>
-                <action android:name="com.skt.prod.dialer.CHANGE_TPHONE_MODE_SETTING" />
-            </intent-filter>
-        </receiver>
     </application>
-
-
 
 </manifest>

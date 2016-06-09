@@ -16,17 +16,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView tv = (TextView) findViewById(R.id.tv);
-
+        receiver = new Receiver(tv);
 
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+
+        unregisterReceiver(receiver);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        registerReceiver(receiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
     }
 }
