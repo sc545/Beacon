@@ -47,9 +47,18 @@ public class FilesActivity extends Activity {
         et = (EditText) findViewById(R.id.et);
         spinPath = (Spinner) findViewById(R.id.spinPath);
 
-        String[] pathList = {"App", "Download"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, android.R.id.text1, pathList);
-        spinPath.setAdapter(adapter);
+        try {
+            if (!Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)){
+                Toast.makeText(this, "SD Card does not exist", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+            String[] pathList = Environment.getExternalStorageDirectory().getAbsoluteFile().list().
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_expandable_list_item_1, android.R.id.text1, );
+            spinPath.setAdapter(adapter);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         spinPath.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
